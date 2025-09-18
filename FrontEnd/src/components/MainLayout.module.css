@@ -1,0 +1,49 @@
+.appLayout {
+  display: flex;
+  height: 100vh;
+  overflow-x: hidden;
+}
+.mainContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease-in-out;
+  width: 100%;
+}
+@media (min-width: 769px) {
+  .mainContent.sidebarPushed {
+    margin-left: 250px;
+  }
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+  background: var(--primary-blue);
+  color: var(--white-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+.menuButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--white-color);
+  margin-right: 15px;
+}
+.navbarLogoContainer {
+  display: flex;
+  align-items: center;
+}
+.navbarLogo {
+  height: 40px;
+  object-fit: contain;
+}
+.contentArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: var(--light-bg);
+}

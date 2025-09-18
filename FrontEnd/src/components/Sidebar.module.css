@@ -1,0 +1,81 @@
+.sidebar {
+  background-color: var(--white-color);
+  color: var(--text-color);
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  left: -250px;
+  top: 0;
+  transition: left 0.3s ease-in-out;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  box-shadow: 4px 0 15px rgba(0,0,0,0.08);
+}
+.sidebar.open {
+  left: 0;
+}
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+.sidebarHeader h3 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--primary-blue);
+}
+.sidebarCloseBtn {
+  background: none;
+  border: none;
+  color: var(--gray-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.sidebarNav {
+  padding-top: 10px;
+}
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: var(--gray-text);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+.sidebarLink:hover {
+  background-color: var(--light-bg);
+  color: var(--primary-blue);
+}
+.sidebarLink.active {
+  background-color: var(--light-bg);
+  color: var(--primary-blue);
+  font-weight: 600;
+  border-left: 3px solid var(--primary-blue);
+}
+.sidebarIcon {
+  margin-right: 15px;
+  font-size: 1.2rem;
+}
+.sidebarOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.sidebarOverlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  display: block;
+}
