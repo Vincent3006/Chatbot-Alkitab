@@ -3,7 +3,6 @@
 import os
 from tqdm import tqdm
 
-# Import dari library LangChain dan lainnya
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain_community.vectorstores import Chroma
@@ -12,9 +11,8 @@ from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_ollama import ChatOllama
-# Import konfigurasi dan utility functions dari file lain
 import config
-from utils import extract_text_with_metadata, process_data_normal_semantic_chunking
+from utils import extract_text_with_metadata, semantic_chunking
 
 def initialize_rag_pipeline():
     embedding_model = HuggingFaceEmbeddings(
@@ -24,10 +22,10 @@ def initialize_rag_pipeline():
     )
 
     if os.path.exists(config.DB_NAME):
-        print(f"Database '{config.DB_NAME}' ditemukan. Memuat...")
+        print(f"2. Database '{config.DB_NAME}' ditemukan. Memuat...")
         vectorstore = Chroma(persist_directory=config.DB_NAME, embedding_function=embedding_model)
     else:
-        print(f"Database '{config.DB_NAME}' tidak ditemukan. Membuat baru...")
+        print(f"2. Database '{config.DB_NAME}' tidak ditemukan. Membuat baru...")
         if not os.path.exists(config.KNOWLEDGE_BASE_DIR):
             raise RuntimeError(f"Direktori '{config.KNOWLEDGE_BASE_DIR}' tidak ditemukan. Startup Gagal.")
         
@@ -36,12 +34,12 @@ def initialize_rag_pipeline():
             raise RuntimeError(f"Tidak ada PDF di '{config.KNOWLEDGE_BASE_DIR}'. Startup Gagal.")
 
         all_final_chunks = []
-        for pdf_name in tqdm(pdf_files, desc="Memproses PDF "):
+        for pdf_name in tqdm(pdf_files, desc="Memproses PDF untuk database"):
             pdf_path = os.path.join(config.KNOWLEDGE_BASE_DIR, pdf_name)
             extracted_data = extract_text_with_metadata(pdf_path)
             if not extracted_data: continue
 
-            final_chunks = process_data_normal_semantic_chunking(extracted_data, embedding_model, config.SIMILARITY_THRESHOLD)
+            final_chunks = semantic_chunking(extracted_data, embedding_model, config.SIMILARITY_THRESHOLD)
             if final_chunks:
                 for chunk in final_chunks:
                     chunk['metadata']['source_pdf'] = pdf_name 
@@ -53,7 +51,13 @@ def initialize_rag_pipeline():
         langchain_documents = [Document(page_content=c['document'], metadata=c['metadata']) for c in all_final_chunks]
         vectorstore = Chroma.from_documents(documents=langchain_documents, embedding=embedding_model, persist_directory=config.DB_NAME)
 
-    print(f" Jumlah dokumen: {vectorstore._collection.count()}")
+    print(f"Jumlah dokumen: {vectorstore._collection.count()}")
+
+    # if not config.GOOGLE_API_KEY or config.GOOGLE_API_KEY == "YOUR_API_KEY_HERE":
+    #     raise RuntimeError("GOOGLE_API_KEY tidak ditemukan. Startup gagal.")
+    # else:
+    #     print("4. GOOGLE_API_KEY ditemukan.")
+
 
     DOCUMENT_PROMPT = PromptTemplate.from_template(config.DOCUMENT_PROMPT_TEMPLATE)
     PROMPT = PromptTemplate(template=config.PROMPT_TEMPLATE, input_variables=["context", "question"])

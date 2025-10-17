@@ -9,7 +9,7 @@ MODEL_KWARGS = {'device': 'cpu'}
 ENCODE_KWARGS = {'normalize_embeddings': False}
 
 
-SIMILARITY_THRESHOLD = 0.7
+SIMILARITY_THRESHOLD = 0.4
 
 DOCUMENT_PROMPT_TEMPLATE = "Rentang: {source_range}\nKonten: {page_content}\n---"
 
