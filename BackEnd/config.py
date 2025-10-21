@@ -1,8 +1,8 @@
 # config.py
 
 KNOWLEDGE_BASE_DIR = "knowledge-base"
-DB_NAME = "chroma_db_Semantic2"
-
+DB_NAME = "chroma_db_normal_semantic"
+# DB_NAME = "chroma_db_0.4"
 # -Embedding 
 MODEL_NAME = "Qwen/Qwen3-Embedding-0.6B"
 MODEL_KWARGS = {'device': 'cpu'}

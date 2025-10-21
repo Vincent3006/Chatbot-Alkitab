@@ -14,16 +14,33 @@ from langchain_ollama import ChatOllama
 import config
 from utils import extract_text_with_metadata, semantic_chunking
 
+# def initialize_rag_pipeline():
+#     embedding_model = HuggingFaceEmbeddings(
+#         model_name=config.MODEL_NAME,
+#         model_kwargs=config.MODEL_KWARGS,
+#         encode_kwargs=config.ENCODE_KWARGS
+#     )
+
+#     if os.path.exists(config.DB_NAME):
+#         print(f"2. Database '{config.DB_NAME}' ditemukan. Memuat...")
+#         vectorstore = Chroma(persist_directory=config.DB_NAME, embedding_function=embedding_model)
 def initialize_rag_pipeline():
+    COLLECTION_NAME="semantic_chunks" 
     embedding_model = HuggingFaceEmbeddings(
         model_name=config.MODEL_NAME,
         model_kwargs=config.MODEL_KWARGS,
         encode_kwargs=config.ENCODE_KWARGS
     )
-
+    # if os.path.exists(config.DB_NAME):
+    #     print(f"2. Database '{config.DB_NAME}' ditemukan. Memuat...")
+    #     vectorstore = Chroma(persist_directory=config.DB_NAME, embedding_function=embedding_model)
     if os.path.exists(config.DB_NAME):
         print(f"2. Database '{config.DB_NAME}' ditemukan. Memuat...")
-        vectorstore = Chroma(persist_directory=config.DB_NAME, embedding_function=embedding_model)
+        vectorstore = Chroma(
+            persist_directory=config.DB_NAME, 
+            embedding_function=embedding_model,
+            collection_name=COLLECTION_NAME  # <--- TAMBAHKAN PARAMETER INI
+        )
     else:
         print(f"2. Database '{config.DB_NAME}' tidak ditemukan. Membuat baru...")
         if not os.path.exists(config.KNOWLEDGE_BASE_DIR):

@@ -7,7 +7,6 @@ from pydantic import BaseModel
 from typing import List
 from rag_pipeline import initialize_rag_pipeline
 
-
 app = FastAPI(
     title="Chatbot Alkitab",
     description="Implementasi Semantic Chunking pada Arsitektur chatbot Alkitab berbasis RAG",
