@@ -168,7 +168,7 @@ class CustomRAGPipeline:
             "answer": answer,
             "source_documents": retrieved_results_with_scores
         }
-    def retrieve_documents(self, question: str, k: int = 4):
+    def retrieve_documents(self, question: str, k: int = 10):
         print(f"   > Melakukan retrieval MURNI untuk pertanyaan: '{question}'")
         question_embedding = self.embedding_model.embed_query(question)
         query_results = self.vectorstore._collection.query(
