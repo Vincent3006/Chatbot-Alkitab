@@ -1,4 +1,4 @@
-# File: custom_embedder.py 
+#kode2\custom_embedder.py
 import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModel

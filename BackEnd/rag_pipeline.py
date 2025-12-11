@@ -1,4 +1,4 @@
-# rag_pipeline.py
+#kode3\rag_pipeline.py
 import os
 import pandas as pd 
 from tqdm import tqdm
@@ -8,7 +8,8 @@ from langchain_core.prompts import PromptTemplate
 import config
 from langchain_ollama import ChatOllama
 from utils import extract_text_with_metadata, semantic_chunking
-from custom_embedder import QwenEmbedder 
+from langchain_huggingface import HuggingFaceEmbeddings
+
 class CustomRAGPipeline:
     def __init__(self):
         print("1. Menginisialisasi Model dan Database...")
@@ -20,17 +21,19 @@ class CustomRAGPipeline:
             template=config.PROMPT_TEMPLATE, 
             input_variables=["chat_history", "context", "question"]
         )
+
     def _initialize_embeddings(self):
-        return QwenEmbedder(
-            model_name=config.MODEL_NAME,
-            device=config.MODEL_KWARGS.get('device', 'cpu') 
-        )
+        return HuggingFaceEmbeddings(
+        model_name=config.MODEL_NAME,
+        model_kwargs=config.MODEL_KWARGS,
+        encode_kwargs=config.ENCODE_KWARGS,
+        show_progress = True
+    )
     def _initialize_llm(self):
         return ChatOllama(
             model="qwen2.5:3b",
             temperature=0.3
         )
-
     def _export_database_to_excel(self, vectorstore):
         """Mengekspor seluruh isi database ke file Excel dengan kolom yang detail."""
         print("\n" + "="*50)
@@ -65,6 +68,7 @@ class CustomRAGPipeline:
             print(f"[ERROR] Gagal mengekspor data ke Excel: {e}")
         finally:
             print("="*50 + "\n")
+
     def _load_or_create_vectorstore(self):
         COLLECTION_NAME = "semantic_chunks"
         if os.path.exists(config.DB_NAME):
@@ -111,10 +115,12 @@ class CustomRAGPipeline:
             print(f"   > Database berhasil dibuat dengan {vectorstore._collection.count()} dokumen.")
             self._export_database_to_excel(vectorstore)
             return vectorstore
+        
     def _format_chat_history(self):
         if not self.chat_history:
             return "Tidak ada riwayat percakapan."
         return "\n".join([f"Manusia: {q}\nAsisten: {a}" for q, a in self.chat_history])
+    
     def invoke(self, question: str):
         standalone_question = question
         retrieved_results_with_scores = self.retrieve_documents(standalone_question, k=10)
@@ -135,7 +141,7 @@ class CustomRAGPipeline:
         formatted_history = self._format_chat_history()
         rag_chain = self.main_prompt | self.llm
         answer = rag_chain.invoke({
-            "chat_history": formatted_history,
+            # "chat_history": formatted_history,
             "context": context,
             "question": question
         }).content
@@ -144,6 +150,7 @@ class CustomRAGPipeline:
             "answer": answer,
             "source_documents": retrieved_results_with_scores
         }
+    
     def retrieve_documents(self, question: str, k: int = 4):
         print(f"Melakukan retrieval untuk pertanyaan: '{question}'")
         question_embedding = self.embedding_model.embed_query(question) 
@@ -164,7 +171,8 @@ class CustomRAGPipeline:
                 "metadata": metadatas[i],
                 "score": similarity_score 
             })
-        print(f"   > Ditemukan {len(results_list)} dokumen relevan dengan skor similarity murni.")
+        print(f"> Ditemukan {len(results_list)} dokumen relevan dengan skor similarity.")
         return results_list
+
 def initialize_rag_pipeline():
     return CustomRAGPipeline()

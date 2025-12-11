@@ -31,7 +31,7 @@ class SourceDocument(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
     sources: List[SourceDocument]
-
+    
 class RetrievedDocument(BaseModel):
     content: str
     metadata: Dict[str, Any]
@@ -50,7 +50,7 @@ class SourceDocumentWithScore(BaseModel):
     source_range: str
     content: str
     score: float
-
+    
 class ChatResponseWithScore(BaseModel):
     answer: str
     sources: List[SourceDocumentWithScore]
@@ -86,6 +86,7 @@ async def retrieve_only(request: ChatRequest):
         return RetrieveResponse(documents=retrieved_results)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Terjadi error internal: {str(e)}")
+    
 if __name__ == "__main__":
     print("Menjalankan server FastAPI di http://0.0.0.0:8000")
     uvicorn.run(app, host="0.0.0.0", port=8000)

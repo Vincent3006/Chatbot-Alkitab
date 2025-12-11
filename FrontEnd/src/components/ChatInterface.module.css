@@ -5,7 +5,7 @@
   height: calc(100vh - 100px);
   max-width: 2000px;
   margin: 0 auto;
-  position: relative; /* Penting untuk positioning modal */
+  position: relative; 
 }
 .chatMessages {
   flex-grow: 1;
@@ -22,7 +22,7 @@
   line-height: 1.5;
   word-wrap: break-word;
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative; /* Penting untuk ikon panah */
+  position: relative; 
 }
 .messageBubble.human {
   background-color: var(--primary-blue);
@@ -36,7 +36,7 @@
   align-self: flex-start;
   border: 1px solid var(--border-color);
   border-bottom-left-radius: 5px;
-  padding-right: 40px; /* Beri ruang untuk ikon panah */
+  padding-right: 40px; 
 }
 .messageBubble.loading p {
   color: var(--gray-text);
@@ -72,7 +72,6 @@
 .messageBubble.ai .messageSource strong {
   color: var(--text-color);
 }
-/* --- STYLE BARU UNTUK IKON PANAH --- */
 .sourceExpandIcon {
   position: absolute;
   top: 50%;
@@ -93,8 +92,6 @@
 .sourceExpandIcon:hover {
   background-color: #e0e0e0;
 }
-
-/* --- STYLE BARU UNTUK MODAL --- */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -143,7 +140,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  overflow-y: auto; /* Agar bisa di-scroll jika sumbernya banyak */
+  overflow-y: auto; 
 }
 .sourceItem {
   border-bottom: 1px solid #eee;
@@ -222,7 +219,6 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
-/* Animasi universal */
 @keyframes popIn {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
