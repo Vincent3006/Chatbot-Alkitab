@@ -7,11 +7,14 @@ tqdm
 # PDF & document handling 
 PyPDF2
 pypdf
+openpyxl
 
 # Vector database & embeddings 
 chromadb
 sentence-transformers
 huggingface-hub
+pandas
+langchain_huggingface
 
 # LangChain 
 langchain
